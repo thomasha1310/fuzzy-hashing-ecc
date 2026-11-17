@@ -2,7 +2,7 @@
 
 A proof of concept for **error correction by consensus against fuzzy hashes**. Each byte of data is stored unchanged, next to $J$ (default 20) locality-sensitive hashes of it: the signs of random ±1 projections, as in SimHash. To repair a corrupted byte, the decoder picks the byte whose data and hashes agree best with what was read. Each hash acts as a *juror* that supports the bytes it recognises.
 
-[`docs/SPEC.md`](docs/SPEC.md) has the full definition, four propositions with proofs, and the reasoning behind each design choice.
+[`docs/summary.pdf`](docs/summary.pdf) has the definition, results and proofs.
 
 ## Usage
 
@@ -41,11 +41,11 @@ assert decode_bytes(blob, code) == b"hello"
 
 | Module | Contents |
 |---|---|
-| `scheme.py` | `ConsensusCode`: the design in docs/SPEC.md, with fast exact decoding of whole files |
+| `scheme.py` | `ConsensusCode`: the chosen design, with fast exact decoding of whole files |
 | `stream.py`, `channel.py` | File framing with a protected length header; bit-flip noise models |
 | `baselines.py` | Repetition code with the same storage cost, for comparison |
 | `research.py`, `projections.py`, `signatures.py` | The alternatives compared before fixing the design (matrix families, threshold rules, decoders) |
-| `experiments.py`, `plotting.py` | The experiments behind SPEC §IV–VI |
+| `experiments.py`, `plotting.py` | The experiments behind the results |
 
 ## Results
 

@@ -1,4 +1,4 @@
-"""Byte-stream framing (SPEC §VII).
+"""Byte-stream framing.
 
 Layout: [length header blocks][data blocks]. Every block is an encoded record
 of `total_bits` bits; the concatenation is packed MSB-first into bytes and

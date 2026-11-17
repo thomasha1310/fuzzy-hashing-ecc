@@ -1,7 +1,7 @@
-"""The fuzzy-hash consensus code exactly as docs/SPEC.md defines it.
+"""The fuzzy-hash consensus code, with its design fixed.
 
-Blocks are always one byte (n = 8) and decoding is always exact (SPEC §III.4).
-Users choose only the number of `jurors` and the `key` (SPEC §I).
+Blocks are always one byte (n = 8) and decoding is always exact.
+Users choose only the number of `jurors` and the `key`.
 """
 
 from dataclasses import dataclass, field
@@ -26,7 +26,7 @@ def _all_bytes() -> Bits:
 
 @dataclass(frozen=True)
 class ConsensusCode:
-    """One byte stored with J sign-of-projection signatures (SPEC §II–III).
+    """One byte stored with J sign-of-projection signatures.
 
     Attributes:
         jurors: number of signatures J. Each block is stored in 8(J + 1) bits.
@@ -52,7 +52,7 @@ class ConsensusCode:
             self, "_codebook_pm", (1.0 - 2.0 * codebook.astype(np.float32)).T.copy()
         )
 
-    # Derived quantities (SPEC §I) ------------------------------------------
+    # Derived quantities --------------------------------------------------
 
     @property
     def n(self) -> int:
@@ -84,7 +84,7 @@ class ConsensusCode:
             f"(stores {self.overhead}× the data)"
         )
 
-    # Operations (SPEC §III) -----------------------------------------------
+    # Operations ----------------------------------------------------------
 
     def signatures(self, x: Bits) -> BoolArray:
         """The J signatures σ_i(x). Shape (..., 8) -> (..., J, 8)."""
@@ -99,7 +99,7 @@ class ConsensusCode:
         return self._impl.split(record)
 
     def score(self, candidates: Bits, record: Bits) -> FloatArray:
-        """S(x̂) (SPEC §III.3) of each candidate block against one read-back record."""
+        """The score S(x̂) = 8J − (Hamming distance) of each candidate block against one read-back record."""
         x_read, stored = self._impl.split(record)
         return self._impl.score(candidates, x_read, stored)
 
@@ -107,7 +107,7 @@ class ConsensusCode:
         """Exact decoding of many records at once. Shape (..., L) -> byte values (...).
 
         Picks the record in the codebook closest in Hamming distance to what
-        was read (SPEC §III.4). Ties go to the candidate that changes fewer
+        was read. Ties go to the candidate that changes fewer
         data bits, then to the smaller byte value.
         """
         records = np.asarray(records, dtype=np.uint8)

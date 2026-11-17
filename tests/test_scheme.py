@@ -1,4 +1,4 @@
-"""Tests of the public ConsensusCode, which is exactly the design in docs/SPEC.md."""
+"""Tests of the public ConsensusCode, which fixes the chosen design."""
 
 import math
 
@@ -48,7 +48,7 @@ def _signature_bits(code: ResearchCode, bits: list[int]) -> list[int]:
 
 
 def test_spec_worked_example() -> None:
-    """SPEC §II.4: one juror, n = 4."""
+    """A hand-checkable example: one juror, n = 4."""
     a = np.array([[1, -1, 1, 1], [-1, -1, 1, -1], [1, 1, 1, -1], [-1, 1, 1, 1]], dtype=float)
     code = ResearchCode(4, 1)
     code.matrices = a[None, :, :]

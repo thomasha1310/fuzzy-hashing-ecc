@@ -1,4 +1,4 @@
-"""Repetition-code baseline, compared at matched storage overhead (SPEC §VI, E3)."""
+"""Repetition-code baseline, compared at matched storage overhead."""
 
 import math
 from dataclasses import dataclass

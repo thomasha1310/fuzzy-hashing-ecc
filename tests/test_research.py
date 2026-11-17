@@ -16,7 +16,7 @@ from fuzzy_hashing_ecc.experiments import (
 from fuzzy_hashing_ecc.research import ResearchCode, Strategy
 from fuzzy_hashing_ecc.signatures import Threshold
 
-"""Tests of the research variants. The SPEC design itself is tested in test_scheme.py."""
+"""Tests of the research variants. The chosen design itself is tested in test_scheme.py."""
 
 CONFIGS = [
     ResearchCode(10),
@@ -73,7 +73,7 @@ def test_score_is_maximised_at_true_block(value: int) -> None:
 
 
 def test_exhaustive_full_radius_is_minimum_distance_decoding() -> None:
-    """SPEC Proposition 1: S(x̂) = J·D - d_H(E(x̂), received)."""
+    """The score is J·D minus the Hamming distance to what was received."""
     code = ResearchCode(8, 6)
     rng = np.random.default_rng(2)
     everything = code.encode(all_blocks(8))

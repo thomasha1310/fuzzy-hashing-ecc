@@ -1,11 +1,11 @@
 """Research version of the consensus code, with every design choice adjustable.
 
-docs/SPEC.md fixes the design, and users should use `ConsensusCode` (scheme.py).
+The design is fixed in `ConsensusCode` (scheme.py), which users should use.
 This class keeps the alternatives that were compared to make those choices:
 matrix families, threshold rules, storage formats, similarity measures,
 aggregation rules and extra decoders. They are kept so the experiments behind
-SPEC §VI stay reproducible. With its defaults, this class is exactly the SPEC
-design.
+the chosen design stay reproducible. With its defaults, this class is exactly
+the chosen design.
 """
 
 import itertools
@@ -45,10 +45,10 @@ class DecodeResult:
 class ResearchCode:
     """A systematic block code: n data bits plus J fuzzy-hash signatures.
 
-    The defaults are the SPEC design: n x n Rademacher matrices, the sign rule,
+    The defaults are the chosen design: n x n Rademacher matrices, the sign rule,
     bitmap storage, agreement similarity, sum aggregation, and proximity weight
     λ = `lam` = 1. With them, exhaustive search over radius n is exact ML
-    decoding (SPEC Proposition 1).
+    decoding.
     """
 
     n: int

@@ -1,4 +1,4 @@
-"""Fuzzy-hash consensus error correction: a proof of concept (see docs/SPEC.md)."""
+"""Fuzzy-hash consensus error correction: a proof of concept (see docs/summary.pdf)."""
 
 import argparse
 import sys
@@ -27,7 +27,7 @@ __all__ = [
 
 def _add_code_args(p: argparse.ArgumentParser) -> None:
     g = p.add_argument_group(
-        "code settings (SPEC §I; encode and decode must use the same values)"
+        "code settings (encode and decode must use the same values)"
     )
     g.add_argument(
         "--jurors", type=int, default=20,
@@ -113,7 +113,7 @@ def _cmd_experiments(a: argparse.Namespace) -> None:
 def main(argv: list[str] | None = None) -> None:
     parser = argparse.ArgumentParser(
         prog="fuzzy-hashing-ecc",
-        description="Fuzzy-hash consensus error correction (see docs/SPEC.md).",
+        description="Fuzzy-hash consensus error correction (see docs/summary.pdf).",
     )
     sub = parser.add_subparsers(dest="command", required=True)
 
@@ -140,7 +140,7 @@ def main(argv: list[str] | None = None) -> None:
     p.add_argument("--toy-only", action="store_true")
     p.set_defaults(func=_cmd_demo)
 
-    p = sub.add_parser("experiments", help="run the SPEC §VI experiments at full size")
+    p = sub.add_parser("experiments", help="run all experiments at full size")
     p.add_argument("--only", nargs="+", choices=["q1", "e1", "e2", "e3", "e4"])
     p.add_argument("--trials", type=int, default=300)
     p.add_argument("--samples", type=int, default=400)

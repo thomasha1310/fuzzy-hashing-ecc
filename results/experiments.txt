@@ -23,7 +23,7 @@ Q1  Minimum distance vs repetition (same storage) and the Gilbert–Varshamov bo
 32        ortho/top-8/bitmap    672  21     21    ≤33        -   258             62.54  16
 32         ortho/top-8/index    832  26     25    ≤95        -   329             171.5  47
   * d_min is exact for n <= 12 (all pairs). For larger n it is the minimum over 400·n sampled single-flip pairs, which is only an upper bound.
-  * ceiling: SPEC Proposition 4, d_min <= 1 + J·D/√n, valid for any matrices with threshold signatures (not defined for top-s).
+  * ceiling: d_min <= 1 + J·D/√n, valid for any real matrices with threshold signatures (not defined for top-s).
   * rep d = r: the minimum distance of the repetition code with odd r and n·r <= L_tot.
   * GV d: a linear code with the same length L_tot and n data bits, and at least this minimum distance, is guaranteed to exist.
   * t = floor((d_min-1)/2): errors per block that are guaranteed to be corrected under ML decoding.
@@ -48,7 +48,7 @@ E1  Signature bits changed by flipping one data bit
 64         ortho/sign/bitmap      5.099      5.106        102       87           0
 64       ortho/top-16/bitmap      4.299          -      85.97       72           0
 64        ortho/top-16/index       19.9          -        398      324           0
-  * predicted (spec design): SPEC Proposition 2, n·C(n-1, ⌊n/2⌋)/2^(n-1).
+  * predicted (chosen design): n·C(n-1, ⌊n/2⌋)/2^(n-1) (the 35/128 lemma, generalised to n).
   * predicted (orthogonal/sign): the SimHash formula D·arccos(1-2/n)/π.
 
 E2  Fraction of blocks decoded correctly with exactly w data-bit errors (n=8 J=20 D=8 rademacher sign bitmap agreement sum λ=1 (ρ=21.0))
@@ -61,7 +61,7 @@ w  greedy clean  greedy noisy  parallel clean  parallel noisy  exact (spec) clea
 3        0.3267        0.1433          0.8633         0.02333                   1              0.4833
 4        0.2967             0            0.17        0.003333                   1                   0
   * clean: signatures intact. noisy: signature bits also flipped at rate w/n (the same bit-error rate as the data).
-  * greedy and parallel are research decoders. With ±1 matrices, pairs of data errors often cancel inside a projection, so fixing one error at a time gives greedy no signal (SPEC §VI).
+  * greedy and parallel are research decoders. With ±1 matrices, pairs of data errors often cancel inside a projection, so fixing one error at a time gives greedy no signal.
   * 300 trials per row.
 
 E3  Block error rate on a binary symmetric channel at matched overhead (n=8 J=20 D=8 rademacher sign bitmap agreement sum λ=1 (ρ=21.0); repetition uses 168 ≤ 168 bits)

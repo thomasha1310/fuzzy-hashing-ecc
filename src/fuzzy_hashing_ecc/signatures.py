@@ -1,7 +1,7 @@
 """Threshold rules, storage formats, similarity measures and aggregation.
 
 A signature is represented internally as a boolean mask over [D] (True means
-"active index"). This is equivalent to the set notation in the SPEC.
+"active index").
 """
 
 import math
@@ -19,7 +19,7 @@ type AggregateKind = Literal["sum", "median", "trimmed"]
 
 
 # --------------------------------------------------------------------------- #
-# Threshold rules (SPEC §II.3)
+# Threshold rules
 # --------------------------------------------------------------------------- #
 
 
@@ -67,7 +67,7 @@ class Threshold:
 
 
 # --------------------------------------------------------------------------- #
-# Storage formats (SPEC §II.4)
+# Storage formats
 # --------------------------------------------------------------------------- #
 
 
@@ -110,7 +110,7 @@ def deserialize(
     """Read (possibly corrupted) stored bits of shape (..., L) back as masks (..., D).
 
     For index lists, out-of-range indices (>= D) are discarded and duplicates
-    are merged, as the SPEC requires.
+    are merged.
     """
     if fmt == "bitmap":
         return np.asarray(bits, dtype=np.bool_)
@@ -125,7 +125,7 @@ def deserialize(
 
 
 # --------------------------------------------------------------------------- #
-# Similarity and aggregation (SPEC §III, Def. 4)
+# Similarity and aggregation
 # --------------------------------------------------------------------------- #
 
 

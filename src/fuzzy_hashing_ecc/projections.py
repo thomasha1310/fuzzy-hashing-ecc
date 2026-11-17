@@ -1,4 +1,4 @@
-"""Projection matrices and the bipolar mapping (SPEC §II.1–II.2)."""
+"""Projection matrices and the bipolar mapping."""
 
 from typing import Literal
 

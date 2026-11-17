@@ -1,4 +1,4 @@
-"""Experiments answering the open questions in SPEC §VI (Q1, E1–E4).
+"""Experiments answering the open questions (Q1, E1–E4).
 
 Every experiment returns a `Table`, which can be printed. The tables are
 reproducible: each one takes an explicit seed for the noise, and the code's
@@ -53,7 +53,7 @@ class Table:
 
 
 def standard_configs(n: int, jurors: int = 20, seed: int = 0) -> list[ResearchCode]:
-    """The configurations compared in Q1 and E1. The first one is the SPEC design."""
+    """The configurations compared in Q1 and E1. The first one is the chosen design."""
     s = max(1, n // 4)
     return [
         ResearchCode(n, jurors, seed=seed),
@@ -88,7 +88,7 @@ def is_spec_design(code: ResearchCode) -> bool:
 
 
 def prop2_single_flip(n: int) -> float:
-    """SPEC Proposition 2 (Rademacher, sign rule): expected bits changed per juror, n·p_n."""
+    """Expected signature bits changed per juror by one data-bit flip (±1 matrices, sign rule): n·C(n-1, ⌊n/2⌋)/2^(n-1)."""
     return float(n * math.comb(n - 1, n // 2)) / float(2 ** (n - 1))
 
 
@@ -101,7 +101,7 @@ def haar_single_flip(n: int, d: int) -> float:
 
 
 def ceiling(code: ResearchCode) -> int | None:
-    """SPEC Proposition 4: d_min <= 1 + J·D/√n for threshold-type signatures."""
+    """General ceiling d_min <= 1 + J·D/√n for threshold signatures and any real matrices (Fourier analysis; O'Donnell, Analysis of Boolean Functions, Ch. 2)."""
     if code.threshold.kind == "top_s" or code.storage != "bitmap":
         return None
     return math.floor(1 + code.jurors * code.d / math.sqrt(code.n))
@@ -199,7 +199,7 @@ def q1_min_distance(
     table.notes += [
         "d_min is exact for n <= 12 (all pairs). For larger n it is the minimum over "
         f"{samples}·n sampled single-flip pairs, which is only an upper bound.",
-        "ceiling: SPEC Proposition 4, d_min <= 1 + J·D/√n, valid for any matrices "
+        "ceiling: d_min <= 1 + J·D/√n, valid for any real matrices "
         "with threshold signatures (not defined for top-s).",
         "rep d = r: the minimum distance of the repetition code with odd r and n·r <= L_tot.",
         "GV d: a linear code with the same length L_tot and n data bits, and at least "
@@ -246,7 +246,7 @@ def e1_single_flip(
                 ]
             )
     table.notes += [
-        "predicted (spec design): SPEC Proposition 2, n·C(n-1, ⌊n/2⌋)/2^(n-1).",
+        "predicted (chosen design): n·C(n-1, ⌊n/2⌋)/2^(n-1) (the 35/128 lemma, generalised to n).",
         "predicted (orthogonal/sign): the SimHash formula D·arccos(1-2/n)/π.",
     ]
     return table
@@ -308,7 +308,7 @@ def e2_errors(
         "(the same bit-error rate as the data).",
         "greedy and parallel are research decoders. With ±1 matrices, pairs of data "
         "errors often cancel inside a projection, so fixing one error at a time gives "
-        "greedy no signal (SPEC §VI).",
+        "greedy no signal.",
         f"{trials} trials per row.",
     ]
     return table

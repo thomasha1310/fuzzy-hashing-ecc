@@ -1,4 +1,4 @@
-"""Noise models for the storage medium (SPEC §III, Def. 3)."""
+"""Noise models for the storage medium."""
 
 import numpy as np
 
