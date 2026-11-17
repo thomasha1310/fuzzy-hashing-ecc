@@ -1,4 +1,4 @@
-"""The fuzzy-hash consensus code exactly as SPEC.md defines it.
+"""The fuzzy-hash consensus code exactly as docs/SPEC.md defines it.
 
 Blocks are always one byte (n = 8) and decoding is always exact (SPEC §III.4).
 Users choose only the number of `jurors` and the `key` (SPEC §I).

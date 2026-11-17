@@ -1,6 +1,6 @@
 """Research version of the consensus code, with every design choice adjustable.
 
-SPEC.md fixes the design, and users should use `ConsensusCode` (scheme.py).
+docs/SPEC.md fixes the design, and users should use `ConsensusCode` (scheme.py).
 This class keeps the alternatives that were compared to make those choices:
 matrix families, threshold rules, storage formats, similarity measures,
 aggregation rules and extra decoders. They are kept so the experiments behind

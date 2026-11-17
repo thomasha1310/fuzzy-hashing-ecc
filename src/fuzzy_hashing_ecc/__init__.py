@@ -1,4 +1,4 @@
-"""Fuzzy-hash consensus error correction: a proof of concept (see SPEC.md)."""
+"""Fuzzy-hash consensus error correction: a proof of concept (see docs/SPEC.md)."""
 
 import argparse
 import sys
@@ -113,7 +113,7 @@ def _cmd_experiments(a: argparse.Namespace) -> None:
 def main(argv: list[str] | None = None) -> None:
     parser = argparse.ArgumentParser(
         prog="fuzzy-hashing-ecc",
-        description="Fuzzy-hash consensus error correction (see SPEC.md).",
+        description="Fuzzy-hash consensus error correction (see docs/SPEC.md).",
     )
     sub = parser.add_subparsers(dest="command", required=True)
 

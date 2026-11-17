@@ -95,7 +95,9 @@ The header is encoded like any other byte, so it gets the same protection as the
 | Minimum distance $d_{\min}$ | 26–27, depending on the key (measured exactly for keys 0–4) |
 | Errors guaranteed corrected per 168-bit record | 12–13, anywhere in the record |
 | A single flipped data bit goes unnoticed by every juror | probability $(1 - p_8)^{160} \approx 10^{-22}$ for a random key (Prop. 2) |
-| Ceiling on $d_{\min}$ for *any* matrices (Prop. 3) | $1 + 20\sqrt{8} \approx 57$ |
+| Ceiling on $d_{\min}$ for *any* $\pm1$ matrices (Prop. 3) | 44 |
+| Ceiling on $d_{\min}$ for *any* real matrices (Prop. 4) | $1 + 20\sqrt{8} \approx 57$ |
+| Best possible linear code of the same size, 8 data bits in 168 bits ([codetables.de](https://codetables.de/)) | 82 (corrects 40 flips) |
 
 The *minimum distance* $d_{\min}$ is the smallest number of bit positions in which two different records differ. A code with minimum distance $d$ is guaranteed to correct any $\lfloor (d-1)/2 \rfloor$ flipped bits in a record. Because $d_{\min}$ depends on the key, it can be checked for a particular key with `exact_min_distance` in `experiments.py`.
 
@@ -122,7 +124,13 @@ independently for every one of the $Jn$ signature bits. So the number of signatu
 
 Each juror notices a single flipped bit through only about $\sqrt{2n/\pi}$ of its $n$ bits, a fraction that shrinks like $1/\sqrt{n}$. This *locality* is what makes the signatures "fuzzy", and it is also what limits the scheme as a code:
 
-**Proposition 3 (ceiling on the minimum distance).** For **any** choice of the $J$ matrices, real or $\pm1$, with signature bits defined by thresholds as in §II.3:
+**Proposition 3 (ceiling for $\pm1$ matrices).** For **every** choice of $\pm1$ matrices, not just random ones,
+$$d_{\min} \;\le\; \big\lfloor 1 + Jn\,p_n \big\rfloor.$$
+For $n = 8$ and $J = 20$, this gives $d_{\min} \le \lfloor 44.75 \rfloor = 44$.
+
+*Proof.* Fix the matrices, and average $d\big(E(x), E(x')\big)$ over all $2^n \cdot n$ pairs where $x'$ is $x$ with one bit flipped. Fix one row $a$ and one position $j$. As $x$ runs over all $2^n$ blocks, the terms $t_k = a_k b(x)_k$ run over every sign pattern exactly once, because $a$ is fixed. So the counting in the proof of Proposition 2 applies with $x$ random instead of the matrix random: the bit $[a \cdot b(x) > 0]$ changes for exactly a fraction $p_n$ of the blocks. Adding the flipped data bit itself, the average one-flip distance is exactly $1 + Jn\,p_n$. The one-flip pairs are among all pairs, so $d_{\min}$ is at most the smallest one-flip distance, which is at most this average. $d_{\min}$ is an integer. $\blacksquare$
+
+**Proposition 4 (ceiling for any matrices).** For **any** choice of the $J$ matrices, real or $\pm1$, with signature bits defined by thresholds as in §II.3:
 $$d_{\min} \;\le\; 1 + J\sqrt{n}.$$
 
 *Proof.* The minimum distance is at most the *average* distance between $E(x)$ and $E(x')$ over all pairs where $x'$ is $x$ with one bit flipped. That average is $1$ (the data bit itself) plus, for each signature bit $f$, the probability that a random single flip changes $f$. That probability equals $\mathrm{I}[f]/n$, where the *total influence* $\mathrm{I}[f]$ is the expected number of positions $j$ at which flipping $x_j$ changes $f(x)$, for a uniformly random $x$.
@@ -135,15 +143,15 @@ The bound is nearly tight for this design. Majority is the threshold function wi
 
 **How this compares with other codes using the same storage ($J = 20$, so $L = 21n$):**
 
-| $n$ | measured $d_{\min}$ (exact, key 0) | ceiling $1 + J\sqrt{n}$ | repetition code, 21 copies | guaranteed achievable by a linear code (Gilbert–Varshamov) |
-|---|---|---|---|---|
-| **8** | **27** | **57** | **21** | **69** |
-| 10 | 29 | 64 | 21 | 85 |
-| 12 | 29 | 70 | 21 | 100 |
-| 16 | — | 81 | 21 | 132 |
-| 32 | — | 114 | 21 | 258 |
+| $n$ | measured $d_{\min}$ (exact, key 0) | ceiling, $\pm1$ matrices (Prop. 3) | ceiling, any matrices (Prop. 4) | repetition code, 21 copies | linear code guaranteed to exist (Gilbert–Varshamov) |
+|---|---|---|---|---|---|
+| **8** | **27** | **44** | **57** | **21** | **69** |
+| 10 | 29 | 50 | 64 | 21 | 85 |
+| 12 | 29 | 55 | 70 | 21 | 100 |
+| 16 | — | 63 | 81 | 21 | 132 |
+| 32 | — | 90 | 114 | 21 | 258 |
 
-At $n = 8$ the scheme beats simple repetition (27 vs 21), but it reaches less than half of what a well-designed code of the same size is guaranteed (69). As $n$ grows the gap only widens: the scheme's minimum distance, as a fraction of the record length, shrinks like $1/\sqrt{n}$, while good codes keep a fixed fraction. Thresholded projections spend their redundancy on *preserving similarity*, not on *separating codewords*.
+At $n = 8$ the best linear code of the same size is known exactly: minimum distance 82, which is proven optimal (Grassl's tables at codetables.de; the matching upper bound is the Griesmer bound). The scheme beats simple repetition (27 vs 21), but reaches only about a third of the optimum, and no choice of $\pm1$ matrices can exceed 44. As $n$ grows the gap only widens: the scheme's minimum distance, as a fraction of the record length, shrinks like $1/\sqrt{n}$, while good codes keep a fixed fraction. Thresholded projections spend their redundancy on *preserving similarity*, not on *separating codewords*.
 
 ## VI. Why These Design Choices
 
@@ -152,7 +160,7 @@ Each fixed choice was picked from alternatives that were tested. The full result
 | Choice | Alternatives tested | Reason |
 |---|---|---|
 | One-byte blocks, exact decoding | longer blocks with a greedy bit-flip search | Bytes are the natural unit of data, and 256 candidates make the optimal decoder cheap. Longer blocks would need a search heuristic, and the analysis in §V shows they would not help. |
-| Random ±1 matrices | random orthogonal (rotation) matrices | Larger minimum distance at every $n$ tested: 27 vs 20 at $n = 8$. Exact integer arithmetic. Attains the average-case maximum of Prop. 3. |
+| Random ±1 matrices | random orthogonal (rotation) matrices | Larger minimum distance at every $n$ tested: 27 vs 20 at $n = 8$. Exact integer arithmetic. Attains the average-case maximum of Prop. 4. |
 | Sign of each projection | keep only the $s$ largest entries | Keeping the largest entries gave a smaller minimum distance, below the repetition code's. |
 | Store all 8 signature bits | store the positions of the largest entries | Storing all bits makes Proposition 1 hold. |
 | Score = total agreement − data bits changed | median or trimmed mean of jurors; overlap or Jaccard similarity | Makes decoding optimal (Prop. 1). The robust alternatives were no better even when a quarter of the jurors' signatures were destroyed. |

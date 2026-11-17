@@ -101,7 +101,7 @@ def haar_single_flip(n: int, d: int) -> float:
 
 
 def ceiling(code: ResearchCode) -> int | None:
-    """SPEC Proposition 3: d_min <= 1 + J·D/√n for threshold-type signatures."""
+    """SPEC Proposition 4: d_min <= 1 + J·D/√n for threshold-type signatures."""
     if code.threshold.kind == "top_s" or code.storage != "bitmap":
         return None
     return math.floor(1 + code.jurors * code.d / math.sqrt(code.n))
@@ -199,7 +199,7 @@ def q1_min_distance(
     table.notes += [
         "d_min is exact for n <= 12 (all pairs). For larger n it is the minimum over "
         f"{samples}·n sampled single-flip pairs, which is only an upper bound.",
-        "ceiling: SPEC Proposition 3, d_min <= 1 + J·D/√n, valid for any matrices "
+        "ceiling: SPEC Proposition 4, d_min <= 1 + J·D/√n, valid for any matrices "
         "with threshold signatures (not defined for top-s).",
         "rep d = r: the minimum distance of the repetition code with odd r and n·r <= L_tot.",
         "GV d: a linear code with the same length L_tot and n data bits, and at least "

@@ -2,7 +2,7 @@
 
 A proof of concept for **error correction by consensus against fuzzy hashes**. Each byte of data is stored unchanged, next to $J$ (default 20) locality-sensitive hashes of it: the signs of random ±1 projections, as in SimHash. To repair a corrupted byte, the decoder picks the byte whose data and hashes agree best with what was read. Each hash acts as a *juror* that supports the bytes it recognises.
 
-[`SPEC.md`](SPEC.md) has the full definition, three propositions with proofs, and the reasoning behind each design choice.
+[`docs/SPEC.md`](docs/SPEC.md) has the full definition, four propositions with proofs, and the reasoning behind each design choice.
 
 ## Usage
 
@@ -41,7 +41,7 @@ assert decode_bytes(blob, code) == b"hello"
 
 | Module | Contents |
 |---|---|
-| `scheme.py` | `ConsensusCode`: the design in SPEC.md, with fast exact decoding of whole files |
+| `scheme.py` | `ConsensusCode`: the design in docs/SPEC.md, with fast exact decoding of whole files |
 | `stream.py`, `channel.py` | File framing with a protected length header; bit-flip noise models |
 | `baselines.py` | Repetition code with the same storage cost, for comparison |
 | `research.py`, `projections.py`, `signatures.py` | The alternatives compared before fixing the design (matrix families, threshold rules, decoders) |
@@ -49,19 +49,11 @@ assert decode_bytes(blob, code) == b"hello"
 
 ## Results
 
-The full output is in [`results/experiments.txt`](results/experiments.txt). All numbers are for the default 20 jurors, which store **21×** the original data.
+With 20 jurors (21× storage), the scheme beats plain repetition: minimum distance 27 vs 21, and 6.7% vs 19% of bytes lost at a 30% bit-flip rate. But it falls far short of the optimal linear code of the same size, which has minimum distance 82 ([codetables.de](https://codetables.de/)). For *any* choice of ±1 matrices the minimum distance is at most 44. With only 2 jurors (3× storage), it loses even to storing three copies (TMR).
 
-**1. Every 168-bit record survives 12–13 flipped bits anywhere,** guaranteed. The minimum distance is 26–27, depending on the key. A repetition code using the same storage (21 copies of each bit) has minimum distance 21.
-
-**2. It beats that repetition code in practice too** (E3). At a bit-flip rate of 25%, it loses 0.3% of bytes while repetition loses 5%. At 30%, the figures are 6.7% against 19%.
+Proofs: [`docs/summary.pdf`](docs/summary.pdf). Full experiment output: [`results/experiments.txt`](results/experiments.txt).
 
 ![Block error rate against bit-flip probability](results/e3_bler.png)
-
-**3. The theory matches the measurements.** Proposition 2 gives an exact formula for how many signature bits react to one flipped data bit; the measurements agree to within 1% (E1). Proposition 3 proves a ceiling on the minimum distance for *any* choice of matrices, and every configuration tested stays under it (Q1).
-
-**4. It is still far from a *good* code** (Q1). The Gilbert–Varshamov bound guarantees that some linear code with the same size reaches minimum distance 69, against 27 here, and Proposition 3 shows the gap grows with block length. The reason is that fuzzy hashes are designed to keep similar inputs similar, which is the opposite of what error correction needs.
-
-**5. Losing jurors barely matters** (E4). Replacing a quarter of the stored signatures with random bits has no measurable effect once $J \ge 10$.
 
 ## Open directions
 

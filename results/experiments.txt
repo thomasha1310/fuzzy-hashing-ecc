@@ -23,7 +23,7 @@ Q1  Minimum distance vs repetition (same storage) and the Gilbert–Varshamov bo
 32        ortho/top-8/bitmap    672  21     21    ≤33        -   258             62.54  16
 32         ortho/top-8/index    832  26     25    ≤95        -   329             171.5  47
   * d_min is exact for n <= 12 (all pairs). For larger n it is the minimum over 400·n sampled single-flip pairs, which is only an upper bound.
-  * ceiling: SPEC Proposition 3, d_min <= 1 + J·D/√n, valid for any matrices with threshold signatures (not defined for top-s).
+  * ceiling: SPEC Proposition 4, d_min <= 1 + J·D/√n, valid for any matrices with threshold signatures (not defined for top-s).
   * rep d = r: the minimum distance of the repetition code with odd r and n·r <= L_tot.
   * GV d: a linear code with the same length L_tot and n data bits, and at least this minimum distance, is guaranteed to exist.
   * t = floor((d_min-1)/2): errors per block that are guaranteed to be corrected under ML decoding.

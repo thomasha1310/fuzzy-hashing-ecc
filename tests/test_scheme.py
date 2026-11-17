@@ -1,4 +1,4 @@
-"""Tests of the public ConsensusCode, which is exactly the design in SPEC.md."""
+"""Tests of the public ConsensusCode, which is exactly the design in docs/SPEC.md."""
 
 import math
 
