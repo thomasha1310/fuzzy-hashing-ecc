@@ -1,17 +1,38 @@
 [project]
 name = "fuzzy-hashing-ecc"
 version = "0.1.0"
-description = "Add your description here"
+description = "Systematic error correction by consensus decoding against locality-sensitive (fuzzy) hash signatures"
 readme = "README.md"
 authors = [
     { name = "Thomas Ha", email = "thomasha.1310@gmail.com" }
 ]
 requires-python = ">=3.14"
-dependencies = []
+dependencies = [
+    "numpy>=2.5.5",
+]
 
 [project.scripts]
 fuzzy-hashing-ecc = "fuzzy_hashing_ecc:main"
 
+[project.optional-dependencies]
+plot = [
+    "matplotlib>=3.11.2",
+]
+
 [build-system]
 requires = ["uv_build>=0.13.1,<0.14.0"]
 build-backend = "uv_build"
+
+[tool.mypy]
+strict = true
+files = ["src", "tests"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[dependency-groups]
+dev = [
+    "hypothesis>=6.170.15",
+    "mypy>=2.4.1",
+    "pytest>=9.2.0",
+]
